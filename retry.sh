@@ -6,6 +6,15 @@ set -u
 AD="dfwl:EU-FRANKFURT-1-AD-1"
 SHAPE='[{"instanceShape":"VM.Standard.A1.Flex","instanceShapeConfig":{"ocpus":2,"memoryInGBs":12}}]'
 
+if [ -z "${C:-}" ]; then
+  echo "Secrets mangler ennå. Gjør ingenting."
+  exit 0
+fi
+if ! oci os ns get >/dev/null 2>&1; then
+  echo "Innlogging mot Oracle feilet. Sjekk secrets. Gjør ingenting."
+  exit 1
+fi
+
 skjul() { sed -E 's/ocid1\.[A-Za-z0-9._-]+/ocid1.[skjult]/g'; }
 
 slaa_av() {
